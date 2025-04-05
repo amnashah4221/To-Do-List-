@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>To Do List</title>
+    <link rel="stylesheet" href="styles.css"/>
+</head>
+<body>
+    <div class="container">
+        <h1>To-Do List</h1>
+
+        <div class="add-list">
+            <input type="text" id="addtask" placeholder="Add a new task" />
+            <input type="button" id="add-btn" value="Add" onclick="additem()"/>
+        </div>
+
+        <div id="tasklist">
+
+        </div>
+
+
+        <hr/>
+        <div class="footer">
+            <p class="taskcount">0 tasks left</p>
+            <input type="button" id="clear-btn" value="Clear All" onclick="clearall()"/>
+        </div>
+    </div>
+
+    <script>
+            function additem(){
+                let input = document.getElementById('addtask');
+                let task = input.value.trim();
+
+                //corner case
+                if(task === ''){
+                    return;
+                }
+
+                let li = document.createElement('li');
+                li.className = 'todo-item';
+
+                li.innerHTML = 
+                `<span>${task}</span>
+                 <div class="buttons">
+                <button class="done-btn" onclick="done(this)">Done</button>
+                <button class="delete-btn" onclick="deleteitem(this)">Delete</button>
+                </div>
+                `
+                document.getElementById('tasklist').appendChild(li);
+                input.value = '';
+
+                updatecount();   
+            }
+
+            function done(button) {
+                let taskitem = button.closest('.todo-item');
+                let text = taskitem.querySelector('span');
+                text.classList.toggle('done');
+                updatecount();
+            }
+
+            function deleteitem(button) {
+                let taskitem = button.closest('.todo-item');
+                taskitem.remove();
+                updatecount();
+
+            }
+
+
+            function clearall(){
+                let tasklist = document.getElementById('tasklist');
+                tasklist.innerHTML = '';
+                updatecount();
+            }
+
+            function updatecount(){
+                let total = document.querySelectorAll('.todo-item').length;
+                let done = document.querySelectorAll('.done').length;
+                document.querySelector('.taskcount').innerText = `${total - done} tasks left` ;
+            }
+    </script>
+</body>
+</html>
